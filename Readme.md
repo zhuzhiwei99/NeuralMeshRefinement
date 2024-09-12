@@ -37,7 +37,7 @@ You can also try other pre-trained models and coarse meshes.
 
 ## ckpt
 
-- `ckpt/thingi10k_netparams.dat`: We trained this net using the [Thingi10k]([Thingi10K (ten-thousand-models.appspot.com)](https://ten-thousand-models.appspot.com/)) dataset, which can adaptively refine the coarse mesh.
+- `ckpt/thingi10k_netparams.dat`: We trained this net using the [Thingi10k](https://ten-thousand-models.appspot.com/) dataset, which can adaptively refine the coarse mesh.
 - `ckpt/bunny_netparams.dat`: We trained this net using the `data_meshes/original/bunny.obj`, which tends to smoothly refine the coarse mesh.
 - `ckpt/gear_netparams.dat`:  We trained this net using the `data_meshes/original/gear.obj`, which tends to sharply refine the coarse mesh.
 
@@ -47,7 +47,7 @@ You can also try other pre-trained models and coarse meshes.
 
 - `data_meshes/coarse/cube.obj`
 
-You can also try other coarse manifold meshes, otherwise using [fTetWild]([github.com](https://github.com/wildmeshing/fTetWild)) to preprocess them.
+You can also try other coarse manifold meshes, otherwise using [fTetWild](https://github.com/wildmeshing/fTetWild) to preprocess them.
 
 # Train
 
