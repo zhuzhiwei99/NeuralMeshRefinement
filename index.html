@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Neural Mesh Refinement (NMR) performs data-driven nonlinear refinement and demonstrates robust generalization to unseen shapes and arbitrary refinement levels.">
+  <meta name="keywords" content="NMR, Neural Mesh Refinement, Mesh Subdivision, Deep Learning, Geometry Processing">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neural Mesh Refinement</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300..900&family=Noto+Sans:wght@300;400;700&family=Castoro:wght@400&display=swap"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <!-- MathJax Configuration -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+  <!-- End MathJax Configuration -->
+
+
+  <style>
+    :root {
+      --bulma-scheme-h: 250deg; 
+      --bulma-scheme-s: 57%;
+      --bulma-scheme-l: 53%;
+    }
+
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      font-weight: 300;
+    }
+
+    .title,
+    .publication-title,
+    .section-title { 
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .publication-title {
+      font-weight: 700; 
+    }
+
+    .publication-authors {
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .hero.teaser .hero-body, .hero.is-light .hero-body {
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+    }
+    .section {
+        padding: 2rem 1.5rem; 
+    }
+
+    .navbar-item .icon {
+      color: #3273dc; 
+    }
+    .navbar-item .icon:hover {
+      color: #363636; 
+    }
+    .navbar .navbar-menu {
+      box-shadow: none; 
+    }
+
+    .publication-links .link-block {
+        margin: 5px;
+        display: inline-block;
+    }
+    .publication-links .button .icon { 
+        font-size: 1rem;
+    }
+
+    .teaser-image-container {
+        text-align: center; 
+    }
+    .teaser-image-container img {
+        max-width: 100%; 
+        height: auto;
+        border-radius: 6px;
+        box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+    }
+    .teaser-caption {
+        margin-top: 0.5rem;
+        font-style: italic;
+        font-size: 0.9rem;
+        color: #4a4a4a; 
+    }
+        /* Styling for individual mesh viewer instances */
+    .mesh-viewer-instance-container {
+        border: 1px solid #dbdbdb;
+        background-color: #f5f5f5;
+        position: relative;
+        border-radius: 4px;
+        overflow: hidden;
+        width: 100%;
+        /* Adjust height for 6 viewers in a row, this will be quite small */
+        height: 200px; 
+        margin-bottom: 0.5rem;
+    }
+    .loading-message-instance {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.8em; /* Smaller font for smaller container */
+        color: #4a4a4a;
+        text-align: center;
+        padding: 5px;
+    }
+
+
+    ul.features-list {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    ul.features-list li {
+        position: relative;
+        padding-left: 1.8em;
+        margin-bottom: 0.75em;
+    }
+    ul.features-list li::before {
+        content: "\f058"; 
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900; 
+        position: absolute;
+        left: 0;
+        top: 0.1em;
+        color: hsl(var(--bulma-primary-h), var(--bulma-primary-s), var(--bulma-primary-l)); 
+        font-size: 1.1em;
+    }
+     ul.features-list li strong {
+        font-weight: 600;
+    }
+    pre.bibtex { 
+        background-color: hsl(0, 0%, 96%);
+        border-radius: 4px;
+        color: hsl(0, 0%, 29%);
+        font-size: 0.875em;
+        overflow-x: auto;
+        padding: 1.25rem 1.5rem;
+        white-space: pre;
+        word-wrap: normal;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .content p, .content ul, .content ol {
+        font-size: 1rem;
+        line-height: 1.7; 
+    }
+    .content ol li { /* ensure list items inside ordered list also have good line height */
+        line-height: 1.7;
+    }
+    .content ol ul li { /* for nested unordered lists */
+        line-height: 1.6;
+        margin-bottom: 0.5em;
+    }
+
+    .hero .subtitle { 
+        padding-top: 1rem;
+        margin-bottom: 0;
+    }
+    .viewer-column .subtitle { /* For the "Input (SubD 0)" / "Ours (SubD 2)" titles */
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+
+  </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+<nav class="navbar py-2" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="#">
+        <strong style="font-family: 'Google Sans', sans-serif; font-size: 1.2rem;">NMR</strong>
+      </a>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div id="navbarMenu" class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="#abstract">Abstract</a>
+        <a class="navbar-item" href="#teaser-section">Teaser</a>
+        <a class="navbar-item" href="#interactive-demo">Interactive Demo</a>
+        <a class="navbar-item" href="#results">Results</a>
+        <a class="navbar-item" href="#features">Features</a>
+        <a class="navbar-item" href="#citation">Cite</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            Neural Mesh Refinement
+          </h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://zhuzhiwei99.github.io/">Zhiwei ZHU</a>,</span>
+            <span class="author-block"><a href="https://ieeexplore.ieee.org/author/815449456750000">Xiang GAO</a>,</span>
+            <span class="author-block"><a href="https://mypage.zju.edu.cn/yul">Lu YU</a><sup><small>†</small></sup>,</span>
+            <span class="author-block"><a href="https://yiyiliao.github.io/">Yiyi LIAO</a><sup><small>†</small></sup></span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block">College of Information Science and Electronic Engineering, Zhejiang University, Hangzhou 310027, China</span><br>
+            <span class="author-block">Zhejiang Provincial Key Laboratory of Information Processing, Communication and Networking (IPCAN), Hangzhou 310027, China</span><br>
+            <span class="author-block is-size-6"><sup><small>†</small></sup>Corresponding author</span>
+          </div>
+           <div class="column has-text-centered is-size-5" style="margin-top: 0.5rem;">
+              <em>Frontiers of Information Technology & Electronic Engineering (FITEE), 05, 2025 (<strong>Cover Article</strong>)</em>
+           </div>
+
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="[LINK_TO_YOUR_PAPER_PDF_HERE]" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="[LINK_TO_ARXIV_IF_AVAILABLE]" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="[LINK_TO_VIDEO_IF_AVAILABLE]" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-youtube"></i></span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/zhuzhiwei99/zhuzhiwei99.github.io/tree/main/projects/2024_NeuralMeshRefinement" target="_blank"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser" id="teaser-section">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+        <div class="teaser-image-container">
+            <!-- IMPORTANT: Ensure 'figures/Fig1.jpg' exists -->
+            <img src="figures/Fig1.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
+        </div>
+      <h2 class="subtitle has-text-centered teaser-caption">
+        Neural Mesh Refinement (NMR) performs data-driven nonlinear refinement and demonstrates robust generalization to unseen shapes and arbitrary refinement levels. It can refine coarse input shapes into finer ones with appropriate geometric details through subdivision, even when trained on a single object. NMR does not suffer from the inherent limitations of existing methods, such as volume shrinkage and over-smoothing (Loop), amplification of tessellation artifacts (Modified Butterfly), or shape damage (Neural Subdivision). Moreover, it outperforms Neural Subdivision in generalization across unseen refinement levels and non-isometric deformations.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="abstract">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered section-title">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Subdivision is a widely used technique for mesh refinement. Classic methods rely on fixed manually-defined weighting rules and struggle to generate a finer mesh with appropriate details, while advanced neural subdivision methods achieve data-driven nonlinear subdivision but lack robustness, suffering from limited subdivision levels and artifacts on novel shapes. To address these issues, this paper introduces a Neural Mesh Refinement (NMR) method that utilizes a learned geometric prior on fine shapes to adaptively refine coarse meshes through subdivision, demonstrating robust generalization. Our key insight is that it is necessary to disentangle the network from non-structural information such as scale, rotation, and translation, enabling it to focus on learning and applying the structural priors of local patches for adaptive refinement. For this purpose, we introduce an intrinsic structure descriptor and a locally adaptive neural filter. The intrinsic structure descriptor excludes the non-structural information to align local patches, thereby stabilizing the input feature space and enabling the network to robustly extract structural priors. The proposed neural filter, using a graph attention mechanism, extracts local structural features and adapts learned priors to local patches. Additionally, we observe that Charbonnier loss can alleviate over-smoothing compared to L2 loss. By combining these design choices, our method gains robust geometric learning and locally adaptive capabilities, enhancing generalization to unseen shapes and arbitrary refinement levels. We evaluate our method on a diverse set of complex three-dimensional (3D) shapes and show that it outperforms existing subdivision methods in terms of geometry quality.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pipeline">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered section-title">Method / Pipeline</h2>
+    <div class="content has-text-justified">
+        <p>Our Neural Mesh Refinement (NMR) method processes a coarse triangle mesh to produce a sequence of subdivided meshes with varying levels of detail. Each refinement step involves three key stages:
+            <ol>
+                <li><strong>Midpoint Subdivision ($\mathcal{M}$):</strong> New vertices are inserted along each edge of the mesh, and faces are subdivided.</li>
+                <li><strong>Intrinsic Structure Descriptor Construction ($\mathcal{I}$):</strong> For newly inserted vertices, an intrinsic structure descriptor is created by normalizing their one-ring neighborhood. This normalization makes the features invariant to scale, rotation, and translation, allowing the network to focus on structural priors.</li>
+                <li><strong>Neural Filter ($\mathcal{N}_{\Theta}$):</strong> This filter predicts offsets for the new vertices to update their positions. It consists of:
+                    <ul>
+                        <li><em>Edge Feature Embedding ($\mathcal{E}_{\theta}$):</em> Captures features from the outgoing edges of the central vertex.</li>
+                        <li><em>Graph Attention Aggregation ($\mathcal{G}_{\theta}$):</em> Aggregates edge features to the central vertex using a graph attention mechanism, adaptively emphasizing relevant local structures.</li>
+                        <li><em>Vertex Repositioning ($\mathcal{V}_{\theta}$):</em> Predicts residuals from the central vertex feature to refine its position.</li>
+                    </ul>
+                </li>
+            </ol>
+        </p>
+        <p>During training, we minimize the Charbonnier loss between the output meshes and the ground truth meshes across different refinement levels. This approach enables NMR to learn adaptive mesh refinement robustly.</p>
+        
+    </div>
+
+
+        <div class="teaser-image-container">
+            <!-- IMPORTANT: Ensure 'figures/Fig1.jpg' exists -->
+            <img src="figures/cover.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
+        </div>
+        <h3 class="subtitle has-text-centered teaser-caption">
+        Neural Mesh Refinement (NMR) processes a coarse triangle mesh (gray) to produce a sequence of subdivided meshes (blue) with varying levels of detail. During training, we minimize the Charbonnier loss between the ground truth (green) and the output meshes (blue) across levels. Our training data comprises pairs of coarse and fine meshes (left) with a bijective map $f$ between each pair. Each refinement involves three steps: $\mathcal{M}$ for midpoint subdivision, $\mathcal{I}$ for intrinsic structure descriptor construction, and $\mathcal{N}_{\Theta}$ for the neural filter. $\mathcal{N}_{\Theta}$ consists of $\mathcal{E}_{\theta}$ (edge feature embedding module), $\mathcal{G}_{\theta}$ (graph attention aggregation module), and $\mathcal{V}_{\theta}$ (vertex repositioning module).
+      </h3>
+
+    
+  </div>
+</section>
+
+
+<section class="section hero is-light" id="interactive-demo">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered section-title">Interactive Demo</h2>
+        <p class="subtitle is-5 has-text-centered" style="margin-bottom: 2.5rem;">
+            Comparison of the results generated by our method and the baseline method. <br>Use mouse to rotate (left-click & drag), pan (right-click & drag), and zoom (scroll wheel).
+        </p>
+
+        <!-- Gear Comparison -->
+        <h3 class="title is-4 has-text-centered">Gear Comparison</h3>
+        <div class="columns is-multiline is-mobile"> 
+          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+            <p class="subtitle is-6 has-text-centered">Input (SubD 0)</p>
+            <div id="viewer-gear-input" class="mesh-viewer-instance-container">
+              <div id="loading-gear-input" class="loading-message-instance">Loading...</div>
+            </div>
+          </div>
+          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+            <p class="subtitle is-6 has-text-centered">Reference</p>
+            <div id="viewer-gear-refer" class="mesh-viewer-instance-container">
+              <div id="loading-gear-refer" class="loading-message-instance">Loading...</div>
+            </div>
+          </div>
+          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+            <p class="subtitle is-6 has-text-centered">Loop (SubD 3)</p>
+            <div id="viewer-gear-loop" class="mesh-viewer-instance-container">
+              <div id="loading-gear-loop" class="loading-message-instance">Loading...</div>
+            </div>
+          </div>
+          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+            <p class="subtitle is-6 has-text-centered">Modified Butterfly (SubD 3)</p>
+            <div id="viewer-gear-mod_butterfly" class="mesh-viewer-instance-container">
+              <div id="loading-gear-mod_butterfly" class="loading-message-instance">Loading...</div>
+            </div>
+          </div>
+          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+            <p class="subtitle is-6 has-text-centered">Neural Subdivsion (SubD 3)</p>
+            <div id="viewer-gear-neural_subdiv" class="mesh-viewer-instance-container">
+              <div id="loading-gear-neural_subdiv" class="loading-message-instance">Loading...</div>
+            </div>
+          </div>
+          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+            <p class="subtitle is-6 has-text-centered">Ours (SubD 3)</p>
+            <div id="viewer-gear-ours" class="mesh-viewer-instance-container">
+              <div id="loading-gear-ours" class="loading-message-instance">Loading...</div>
+            </div>
+          </div>
+        </div>
+        <hr class="my-5">
+
+                <!-- bunny Comparison -->
+        <h3 class="title is-4 has-text-centered">Bunny Comparison</h3>
+        <div class="columns is-multiline is-mobile"> 
+          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+            <p class="subtitle is-6 has-text-centered">Input (SubD 0)</p>
+            <div id="viewer-bunny-input" class="mesh-viewer-instance-container">
+              <div id="loading-bunny-input" class="loading-message-instance">Loading...</div>
+            </div>
+          </div>
+          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+            <p class="subtitle is-6 has-text-centered">Reference</p>
+            <div id="viewer-bunny-refer" class="mesh-viewer-instance-container">
+              <div id="loading-bunny-refer" class="loading-message-instance">Loading...</div>
+            </div>
+          </div>
+          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+            <p class="subtitle is-6 has-text-centered">Loop (SubD 3)</p>
+            <div id="viewer-bunny-loop" class="mesh-viewer-instance-container">
+              <div id="loading-bunny-loop" class="loading-message-instance">Loading...</div>
+            </div>
+          </div>
+          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+            <p class="subtitle is-6 has-text-centered">Modified Butterfly (SubD 3)</p>
+            <div id="viewer-bunny-mod_butterfly" class="mesh-viewer-instance-container">
+              <div id="loading-bunny-mod_butterfly" class="loading-message-instance">Loading...</div>
+            </div>
+          </div>
+          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+            <p class="subtitle is-6 has-text-centered">Neural Subdivsion (SubD 3)</p>
+            <div id="viewer-bunny-neural_subdiv" class="mesh-viewer-instance-container">
+              <div id="loading-bunny-neural_subdiv" class="loading-message-instance">Loading...</div>
+            </div>
+          </div>
+          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+            <p class="subtitle is-6 has-text-centered">Ours (SubD 3)</p>
+            <div id="viewer-bunny-ours" class="mesh-viewer-instance-container">
+              <div id="loading-bunny-ours" class="loading-message-instance">Loading...</div>
+            </div>
+          </div>
+        </div>
+        <hr class="my-5">
+        
+
+
+    </div>
+  </div>
+</section>
+
+<section class="section" id="results">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered section-title">Performance Advantages & Results</h2>
+    <div class="content has-text-justified">
+        <p>Our Neural Mesh Refinement (NMR) method shows significant advantages and robust generalization capabilities compared to existing methods, as demonstrated through extensive experiments on datasets like TOSCA and Thingi10K.</p>
+
+        <h3 class="title is-4 mt-5">1. Generalization to Unseen Shapes</h3>
+        <p>
+            NMR effectively generalizes to shapes not encountered during training. As shown in figures like the main teaser and Fig. 2 (one training pair) and Fig. 11 (generalization to different shapes) from our paper, even when trained on a single object or shape category, NMR can refine novel shapes with high fidelity, preserving geometric details without the artifacts or shape damage seen in methods like Neural Subdivision.
+        </p>
+
+        <h3 class="title is-4 mt-5">2. Generalization to Unseen (Isometric) Poses</h3>
+        <p>
+            A key practical requirement is generalizing to different poses of a character or object. As shown in Fig. 9 of our paper, NMR, even when trained on a single pose, can successfully generalize to various unseen poses under isometric deformations, maintaining detail and structure. This is crucial for applications like character animation.
+        </p>
+
+        <h3 class="title is-4 mt-5">3. Generalization to Arbitrary Refinement Levels</h3>
+        <p>
+            NMR demonstrates robustness to arbitrary refinement levels, even those exceeding the training levels (see Fig. 12). Unlike methods that may overfit to specific scales associated with training subdivision levels, NMR's scale-invariant intrinsic structure descriptor allows it to produce reasonably smooth and detailed surfaces at new levels.
+        </p>
+
+        <h3 class="title is-4 mt-5">4. Generalization to Non-isometric Deformations</h3>
+        <p>
+            Our method handles non-isometric deformations well, which commonly occur in modeling scenarios. As illustrated in Fig. 10 (and the teaser), even with exaggerated non-isometric changes to the coarse cage, NMR produces plausible refinements, outperforming methods like Neural Subdivision that may introduce artifacts in such challenging cases.
+        </p>
+        <p class="mt-4">Quantitative results on TOSCA and Thingi10K (Tables 1 & 2 in paper) consistently show NMR outperforming baselines (Loop, Modified Butterfly, Neural Subdivision) across metrics like Hausdorff Distance (HD), Chamfer Distance (CD), and PSNR, producing meshes closer to ground truth.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section hero is-light" id="features">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered section-title">Key Features of NMR</h2>
+        <div class="content">
+            <p class="has-text-centered">Our Neural Mesh Refinement method is characterized by several innovative contributions:</p>
+            <div class="columns is-centered mt-4">
+                <div class="column is-four-fifths">
+                    <ul class="features-list">
+                        <li>
+                            <strong>Robust Geometric Learning and Generalization:</strong>
+                            NMR demonstrates strong generalization to unseen shapes, poses, arbitrary refinement levels, and non-isometric deformations. This is a core strength achieved through its design.
+                        </li>
+                        <li>
+                            <strong>Intrinsic Structure Descriptor:</strong>
+                            A key component that disentangles the network from non-structural information (scale, rotation, translation). This aligns local patches, stabilizes the input feature space, and enables the network to focus on learning and applying intrinsic structural priors for adaptive refinement.
+                        </li>
+                        <li>
+                            <strong>Locally Adaptive Neural Filter:</strong>
+                            This filter, using a graph attention mechanism, extracts local structural features and dynamically adapts learned priors to local patches of different objects, emphasizing relevant neighbors.
+                        </li>
+                        <li>
+                            <strong>Learned Adaptive Subdivision:</strong>
+                            Rather than fixed rules, NMR learns to adaptively refine meshes, adding detail where needed while preserving smoothness elsewhere. The refinement characteristics can also adapt based on the training data, exhibiting adaptive refinement when trained on diverse datasets (see Fig. 14 in paper).
+                        </li>
+                        <li>
+                            <strong>Data-Driven Geometric Structure Learning & Style Transfer:</strong>
+                            NMR learns complex geometric patterns from data. When trained on specific shapes, it can exhibit style transfer characteristics, refining new meshes in the learned style (see Fig. 13 in paper).
+                        </li>
+                        <li>
+                            <strong>Improved Loss Function (Charbonnier Loss):</strong>
+                            The use of Charbonnier loss, a smooth approximation of L1 loss, helps alleviate over-smoothing often seen with L2 loss, better preserving fine details and aiding convergence.
+                        </li>
+                        <li>
+                            <strong>Progressive Upsampling with Deep Supervision:</strong>
+                            The method recursively refines meshes, and multi-level loss supervision aids in network convergence and allows for outputs at various levels of detail.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="citation">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3 has-text-centered section-title">BibTeX Citation</h2>
+    <p class="has-text-centered">If you find our work useful in your research, please consider citing:</p>
+    <pre class="bibtex"><code>@article{Zhu2025NeuralMeshRefinement,
+    title   = {Neural Mesh Refinement},
+    author  = {ZHU, Zhiwei and GAO, Xiang and YU, Lu and LIAO, Yiyi},
+    journal = {Frontiers of Information Technology & Electronic Engineering (FITEE)},
+    year    = {2025},
+    volume  = {25},
+    number  = {9},
+    pages   = {1--18},
+    doi     = {10.1631/FITEE.2400344}
+}</code></pre>
+    <p class="has-text-centered is-size-6 mt-4">
+        Project supported by the National Natural Science Foundation of China (No. 62071427) and the National Natural Science Foundation of China (No. U21B2004).
+    </p>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+       <p class="is-size-6">
+        © 2024 Zhiwei ZHU, Xiang GAO, Lu YU, Yiyi LIAO.
+      </p>
+       <p class="is-size-7">
+        This website template is available under a <a rel="license"
+        href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+        Commons Attribution-ShareAlike 4.0 International License</a>. You are free to use and adapt the code.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Bulma Navbar Burger Toggle
+document.addEventListener('DOMContentLoaded', () => {
+  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+  if ($navbarBurgers.length > 0) {
+    $navbarBurgers.forEach( el => {
+      el.addEventListener('click', () => {
+        const target = el.dataset.target;
+        const $target = document.getElementById(target);
+        el.classList.toggle('is-active');
+        $target.classList.toggle('is-active');
+      });
+    });
+  }
+});
+</script>
+ <script type="module">
+    import * as THREE from 'three';
+    import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const modelsBasePath = './meshes/'; // OBJ files should be in this folder relative to index.html
+
+    function createViewer(containerId, modelPath, loadingMessageId) {
+        const viewerContainer = document.getElementById(containerId);
+        const loadingMessageElement = document.getElementById(loadingMessageId);
+
+        if (!viewerContainer || !loadingMessageElement) {
+            console.error(`Container or loading message element not found for ${containerId}`);
+            if(loadingMessageElement) loadingMessageElement.textContent = "Viewer setup error.";
+            return;
+        }
+
+        let scene, camera, renderer, controls, currentModel;
+        let animationFrameId; 
+
+        function initInstance() {
+            try {
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0xf5f5f5);
+
+                const VcontainerWidth = viewerContainer.clientWidth;
+                const VcontainerHeight = viewerContainer.clientHeight;
+
+                camera = new THREE.PerspectiveCamera(50, VcontainerWidth / VcontainerHeight, 0.1, 100);
+                camera.position.set(0, 0.3, 2.8); 
+
+                renderer = new THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(VcontainerWidth, VcontainerHeight);
+                viewerContainer.innerHTML = ''; 
+                viewerContainer.appendChild(renderer.domElement);
+                
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+                scene.add(ambientLight);
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+                directionalLight.position.set(1.5, 2.5, 2.0).normalize();
+                scene.add(directionalLight);
+                const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+                directionalLight2.position.set(-1.5, -1.0, -1.5).normalize();
+                scene.add(directionalLight2);
+
+                controls = new OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.dampingFactor = 0.05;
+                controls.screenSpacePanning = true;
+                controls.minDistance = 0.1;
+                controls.maxDistance = 50;
+                controls.target.set(0, 0, 0);
+
+                loadObjModel(modelPath);
+
+                new ResizeObserver(() => {
+                     if (camera && renderer && viewerContainer) {
+                        const newWidth = viewerContainer.clientWidth;
+                        const newHeight = viewerContainer.clientHeight;
+                        if (newWidth > 0 && newHeight > 0) {
+                            camera.aspect = newWidth / newHeight;
+                            camera.updateProjectionMatrix();
+                            renderer.setSize(newWidth, newHeight);
+                        }
+                    }
+                }).observe(viewerContainer);
+
+
+                animateInstance();
+            } catch (error) {
+                console.error(`Error initializing 3D viewer for ${containerId}:`, error);
+                loadingMessageElement.textContent = "Error initializing viewer.";
+                loadingMessageElement.style.color = "#ff3860";
+                loadingMessageElement.style.display = 'block'; 
+            }
+        }
+
+        function loadObjModel(path) {
+            if (currentModel) {
+                scene.remove(currentModel);
+                currentModel.traverse(child => {
+                    if (child.isMesh) {
+                        child.geometry.dispose();
+                        if (child.material) {
+                            if (Array.isArray(child.material)) child.material.forEach(m => m.dispose());
+                            else child.material.dispose();
+                        }
+                    }
+                });
+            }
+            loadingMessageElement.style.display = 'block';
+            loadingMessageElement.style.color = '#4a4a4a';
+            loadingMessageElement.textContent = `Loading ${path.split('/').pop()}...`;
+
+            const loader = new OBJLoader();
+            loader.load(path,
+                (object) => {
+                    currentModel = object;
+                    const box = new THREE.Box3().setFromObject(currentModel);
+                    const center = box.getCenter(new THREE.Vector3());
+                    const size = box.getSize(new THREE.Vector3());
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const scale = (maxDim > 0) ? (1.8 / maxDim) : 1.0; 
+
+                    currentModel.scale.multiplyScalar(scale);
+                    box.setFromObject(currentModel); 
+                    box.getCenter(center); 
+                    currentModel.position.sub(center); 
+
+                    currentModel.traverse(function (child) {
+    if (child.isMesh) {
+        // Get an array of materials, whether child.material is single or array
+        let materialArray = [];
+        if (Array.isArray(child.material)) {
+            materialArray = child.material;
+        } else if (child.material) {
+            materialArray = [child.material];
+        }
+
+        // If no material defined, create a new default one
+        if (materialArray.length === 0 || materialArray.every(m => !m) ) { // Check if array is empty or all its elements are null/undefined
+            child.material = new THREE.MeshStandardMaterial({
+                color: 0xbbbbbb, 
+                roughness: 0.7, // Slightly more diffuse to reduce lighting sensitivity
+                metalness: 0.2,
+                side: THREE.DoubleSide // Crucial for broken/single-sided meshes
+            });
+        } else {
+            // For existing materials, ensure they are DoubleSide
+            materialArray.forEach(mat => {
+                if (mat) { // Make sure the material object itself exists
+                    mat.side = THREE.DoubleSide; // Crucial for broken/single-sided meshes
+                    // You could add more checks here if needed, e.g.,
+                    // if (mat.isMeshBasicMaterial && child.geometry && child.geometry.attributes.color) {
+                    //    mat.vertexColors = true; // if using vertex colors with basic material
+                    // }
+                }
+            });
+        }
+
+        // Compute normals if they don't exist
+        if (child.geometry && !child.geometry.attributes.normal) {
+            try { 
+                child.geometry.computeVertexNormals(); 
+            } catch (e) {
+                console.warn(`Failed to compute normals for mesh part in ${path}. Display might be affected. Consider pre-processing the OBJ.`, e);
+                // Optional: If normals fail, flat shading might look better than broken smooth shading
+                // if (child.material) {
+                //     const mats = Array.isArray(child.material) ? child.material : [child.material];
+                //     mats.forEach(m => { if(m && (m.isMeshStandardMaterial || m.isMeshPhongMaterial)) m.flatShading = true; });
+                // }
+            }
+        }
+    }
+});
+                    scene.add(currentModel);
+                    controls.target.set(0, 0, 0);
+                    camera.lookAt(0,0,0);
+                    controls.update();
+                    loadingMessageElement.style.display = 'none';
+                },
+                undefined,
+                (error) => {
+                    console.error(`Error loading OBJ for ${containerId}: ${path}`, error);
+                    loadingMessageElement.textContent = `Error loading ${path.split('/').pop()}. Check path & console.`;
+                    loadingMessageElement.style.color = "#ff3860";
+                }
+            );
+        }
+
+        function animateInstance() {
+            animationFrameId = requestAnimationFrame(animateInstance);
+            if (controls) controls.update();
+            if (renderer && scene && camera) renderer.render(scene, camera);
+        }
+        
+        function disposeViewer() {
+            cancelAnimationFrame(animationFrameId);
+            if(controls) controls.dispose();
+            if(renderer) {
+                renderer.dispose();
+                if(renderer.domElement.parentElement) {
+                    renderer.domElement.parentElement.removeChild(renderer.domElement);
+                }
+            }
+            if(scene) {
+                 scene.traverse(object => {
+                    if (!object.isMesh) return;
+                    object.geometry.dispose();
+                    if (object.material.isMaterial) {
+                        object.material.dispose();
+                    } else {
+                        for (const material of object.material) material.dispose();
+                    }
+                });
+            }
+        }
+        if(viewerContainer) viewerContainer.dispose = disposeViewer; 
+
+        initInstance(); 
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const viewerConfigurations = [
+            { containerId: 'viewer-gear-input', model: 'gear/input.obj', loadingId: 'loading-gear-input' },
+            { containerId: 'viewer-gear-refer', model: 'gear/gt.obj', loadingId: 'loading-gear-refer' },
+            { containerId: 'viewer-gear-loop', model: 'gear/subd3/loop.obj', loadingId: 'loading-gear-loop' },
+            { containerId: 'viewer-gear-mod_butterfly', model: 'gear/subd3/mb.obj', loadingId: 'loading-gear-mod_butterfly' },
+            { containerId: 'viewer-gear-neural_subdiv', model: 'gear/subd3/ns.obj', loadingId: 'loading-gear-neural_subdiv' },
+            { containerId: 'viewer-gear-ours', model: 'gear/subd3/ours.obj', loadingId: 'loading-gear-ours' },
+            { containerId: 'viewer-bunny-input', model: 'bunny/input.obj', loadingId: 'loading-bunny-input' },
+            { containerId: 'viewer-bunny-refer', model: 'bunny/gt.obj', loadingId: 'loading-bunny-refer' },
+            { containerId: 'viewer-bunny-loop', model: 'bunny/subd3/loop.obj', loadingId: 'loading-bunny-loop' },
+            { containerId: 'viewer-bunny-mod_butterfly', model: 'bunny/subd3/mb.obj', loadingId: 'loading-bunny-mod_butterfly' },
+            { containerId: 'viewer-bunny-neural_subdiv', model: 'bunny/subd3/ns.obj', loadingId: 'loading-bunny-neural_subdiv' },
+            { containerId: 'viewer-bunny-ours', model: 'bunny/subd3/ours.obj', loadingId: 'loading-bunny-ours' },
+           
+        ];
+
+        viewerConfigurations.forEach(config => {
+            createViewer(config.containerId, modelsBasePath + config.model, config.loadingId);
+        });
+    });
+</script>
+</body>
+</html>
