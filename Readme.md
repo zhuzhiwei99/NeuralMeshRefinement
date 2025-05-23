@@ -4,7 +4,9 @@
 
 Neural Mesh Refinement utilized a learned geometric prior on fine shapes to adaptively refine coarse meshes through subdivision, demonstrating robust generalization.
 
-![Teaser of Neural Mesh Refinement](fig/teaser.jpg)
+![Teaser of Neural Mesh Refinement](figures/cover.jpg)
+
+[Comparision to baselines ](figures/Fig1.jpg)
 
 This is a prototype implementation in Python 3.8  with PyTorch 1.12.1.
 
