@@ -259,13 +259,13 @@
                   <span>arXiv</span>
                 </a>
               </span>
-              <span class="link-block">
+              <!-- <span class="link-block">
                 <a href="[LINK_TO_VIDEO_IF_AVAILABLE]" target="_blank"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="fab fa-youtube"></i></span>
                   <span>Video</span>
                 </a>
-              </span>
+              </span> -->
               <span class="link-block">
                 <a href="https://github.com/zhuzhiwei99/zhuzhiwei99.github.io/tree/main/projects/2024_NeuralMeshRefinement" target="_blank"
                    class="external-link button is-normal is-rounded is-dark">
@@ -284,12 +284,11 @@
 <section class="hero teaser" id="teaser-section">
   <div class="container is-max-desktop">
     <div class="hero-body">
-        <div class="teaser-image-container">
-            <!-- IMPORTANT: Ensure 'figures/Fig1.jpg' exists -->
-            <img src="figures/Fig1.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
-        </div>
+
+      <img src="figures/cover.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
+
       <h2 class="subtitle has-text-centered teaser-caption">
-        Neural Mesh Refinement (NMR) performs data-driven nonlinear refinement and demonstrates robust generalization to unseen shapes and arbitrary refinement levels. It can refine coarse input shapes into finer ones with appropriate geometric details through subdivision, even when trained on a single object. NMR does not suffer from the inherent limitations of existing methods, such as volume shrinkage and over-smoothing (Loop), amplification of tessellation artifacts (Modified Butterfly), or shape damage (Neural Subdivision). Moreover, it outperforms Neural Subdivision in generalization across unseen refinement levels and non-isometric deformations.
+        Neural Mesh Refinement (NMR) performs data-driven nonlinear refinement and demonstrates robust generalization to unseen shapes, unseen poses, non-isometric deformation. It can also refine coarse non-organic shapes into finer ones with appropriate geometric details, even when trained on organic shapes. 
       </h2>
     </div>
   </div>
@@ -311,9 +310,9 @@
   </div>
 </section>
 
-<section class="section" id="pipeline">
+<section class="section hero is-light" id="method">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered section-title">Method / Pipeline</h2>
+    <h2 class="title is-3 has-text-centered section-title">Method</h2>
     <div class="content has-text-justified">
         <p>Our Neural Mesh Refinement (NMR) method processes a coarse triangle mesh to produce a sequence of subdivided meshes with varying levels of detail. Each refinement step involves three key stages:
             <ol>
@@ -333,16 +332,52 @@
     </div>
 
 
-        <div class="teaser-image-container">
-            <!-- IMPORTANT: Ensure 'figures/Fig1.jpg' exists -->
-            <img src="figures/cover.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
-        </div>
-        <h3 class="subtitle has-text-centered teaser-caption">
-        Neural Mesh Refinement (NMR) processes a coarse triangle mesh (gray) to produce a sequence of subdivided meshes (blue) with varying levels of detail. During training, we minimize the Charbonnier loss between the ground truth (green) and the output meshes (blue) across levels. Our training data comprises pairs of coarse and fine meshes (left) with a bijective map $f$ between each pair. Each refinement involves three steps: $\mathcal{M}$ for midpoint subdivision, $\mathcal{I}$ for intrinsic structure descriptor construction, and $\mathcal{N}_{\Theta}$ for the neural filter. $\mathcal{N}_{\Theta}$ consists of $\mathcal{E}_{\theta}$ (edge feature embedding module), $\mathcal{G}_{\theta}$ (graph attention aggregation module), and $\mathcal{V}_{\theta}$ (vertex repositioning module).
-      </h3>
+    <div class="teaser-image-container">
+        <!-- IMPORTANT: Ensure 'figures/Fig1.jpg' exists -->
+        <img src="figures/Fig4.jpg" alt="Pipeline of for Neural Mesh Refinement (NMR)">
+    </div>
+    <h3 class="subtitle has-text-centered teaser-caption">
+    NMR processes a coarse triangle mesh (gray) to produce a sequence of subdivided meshes (blue) with varying levels of detail. During training, we minimize the Charbonnier loss between the ground truth (green) and the output meshes (blue) across levels. Our training data comprises pairs of coarse and fine meshes (left) with a bijective map $f$ between each pair. Each refinement involves three steps: $\mathcal{M}$ for midpoint subdivision, $\mathcal{I}$ for intrinsic structure descriptor construction, and $\mathcal{N}_{\Theta}$ for the neural filter. $\mathcal{N}_{\Theta}$ consists of $\mathcal{E}_{\theta}$ (edge feature embedding module), $\mathcal{G}_{\theta}$ (graph attention aggregation module), and $\mathcal{V}_{\theta}$ (vertex repositioning module).
+  </h3>
 
     
   </div>
+</section>
+
+<section class="section" id="Results">
+    <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered section-title">Experimental Results</h2>
+        
+        
+        <h3 class="title is-4 has-text-centered"><a href="https://tosca.cs.technion.ac.il/book/resources_data.html">TOSCA dataset</a></h3>
+        
+        <img src="figures/quan_tosca.png" alt="Quantitative results on the TOSCA dataset">
+        <h2 class="subtitle has-text-centered teaser-caption">
+          NMR outperforms all baseline methods on the TOSCA dataset and exhibits significant advantages across all evaluation metrics.
+        </h2>
+        <div class="teaser-image-container">
+          <img src="figures/Fig7.jpg" alt="Qualitative results on the TOSCA dataset">
+        </div>
+        
+        <h2 class="subtitle has-text-centered teaser-caption">
+          NMR outperforms all baseline methods on the TOSCA dataset and exhibits significant advantages across all evaluation metrics.our approach produces finer meshes closer to the ground truth, successfully addressing issues encountered in other methods, such as over-smoothing, volume shrinkage, and artifacts.
+        </h2>
+
+        <h3 class="title is-4 has-text-centered"><a href="https://ten-thousand-models.appspot.com">Thingi10K dataset</a></h3>
+        
+        <img src="figures/quan_thingi10k.png" alt="Quantitative results in Thingi10K dataset">
+        <h2 class="subtitle has-text-centered teaser-caption">
+          NMR demonstrates robustness when processing meshes with greater diversity in Thingi10K dataset. NMR outperforms all baseline methods on the Thingi10K dataset and exhibits significant advantages across all evaluation metrics.
+        </h2>
+        <div class="teaser-image-container">
+          <img src="figures/thingi10k_ns_fail.jpg" alt="Qualitative results on the Thingi10K dataset">
+        </div>
+         
+        <h2 class="subtitle has-text-centered teaser-caption">
+          When processing meshes with closely adjacent surfaces, Neural Subdivision may develop self-intersection after a single subdivision step, thereby disrupting the manifold and causing subsequent subdivision steps to fail. In some cases, this ultimately leads to the inability to generate reasonable results, resulting in disrupted mesh shapes.
+        </h2>
+        <p> We found that Neural Subdivision performs extremely poorly on the Thingi10k dataset. This is because the Thingi10K dataset contains meshes with greater diversity compared to the Tosca dataset. Neural subdivision struggles to converge among patches with diverse geometric characteristics. In contrast, our method demonstrates robustness and does not encounter this issue. For a fairer comparison, the results marked as $Neural\_subdivision*$ in the Table 3 of our paper represent the statistical averages after excluding objects for which Neural Subdivision fails to preserve the shape of the input mesh. Our method still maintains a significant advantage.</p>
+    </div>
 </section>
 
 
@@ -357,37 +392,37 @@
         <!-- Gear Comparison -->
         <h3 class="title is-4 has-text-centered">Gear Comparison</h3>
         <div class="columns is-multiline is-mobile"> 
-          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+          <div class="column is-4-desktop is-4-tablet is-half-mobile viewer-column">
             <p class="subtitle is-6 has-text-centered">Input (SubD 0)</p>
             <div id="viewer-gear-input" class="mesh-viewer-instance-container">
               <div id="loading-gear-input" class="loading-message-instance">Loading...</div>
             </div>
           </div>
-          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+          <div class="column is-4-desktop is-4-tablet is-half-mobile viewer-column">
             <p class="subtitle is-6 has-text-centered">Reference</p>
             <div id="viewer-gear-refer" class="mesh-viewer-instance-container">
               <div id="loading-gear-refer" class="loading-message-instance">Loading...</div>
             </div>
           </div>
-          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+          <div class="column is-4-desktop is-4-tablet is-half-mobile viewer-column">
             <p class="subtitle is-6 has-text-centered">Loop (SubD 3)</p>
             <div id="viewer-gear-loop" class="mesh-viewer-instance-container">
               <div id="loading-gear-loop" class="loading-message-instance">Loading...</div>
             </div>
           </div>
-          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+          <div class="column is-4-desktop is-4-tablet is-half-mobile viewer-column">
             <p class="subtitle is-6 has-text-centered">Modified Butterfly (SubD 3)</p>
             <div id="viewer-gear-mod_butterfly" class="mesh-viewer-instance-container">
               <div id="loading-gear-mod_butterfly" class="loading-message-instance">Loading...</div>
             </div>
           </div>
-          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+          <div class="column is-4-desktop is-4-tablet is-half-mobile viewer-column">
             <p class="subtitle is-6 has-text-centered">Neural Subdivsion (SubD 3)</p>
             <div id="viewer-gear-neural_subdiv" class="mesh-viewer-instance-container">
               <div id="loading-gear-neural_subdiv" class="loading-message-instance">Loading...</div>
             </div>
           </div>
-          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+          <div class="column is-4-desktop is-4-tablet is-half-mobile viewer-column">
             <p class="subtitle is-6 has-text-centered">Ours (SubD 3)</p>
             <div id="viewer-gear-ours" class="mesh-viewer-instance-container">
               <div id="loading-gear-ours" class="loading-message-instance">Loading...</div>
@@ -399,37 +434,37 @@
                 <!-- bunny Comparison -->
         <h3 class="title is-4 has-text-centered">Bunny Comparison</h3>
         <div class="columns is-multiline is-mobile"> 
-          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+          <div class="column is-4-desktop is-4-tablet is-half-mobile viewer-column">
             <p class="subtitle is-6 has-text-centered">Input (SubD 0)</p>
             <div id="viewer-bunny-input" class="mesh-viewer-instance-container">
               <div id="loading-bunny-input" class="loading-message-instance">Loading...</div>
             </div>
           </div>
-          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+          <div class="column is-4-desktop is-4-tablet is-half-mobile viewer-column">
             <p class="subtitle is-6 has-text-centered">Reference</p>
             <div id="viewer-bunny-refer" class="mesh-viewer-instance-container">
               <div id="loading-bunny-refer" class="loading-message-instance">Loading...</div>
             </div>
           </div>
-          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+          <div class="column is-4-desktop is-4-tablet is-half-mobile viewer-column">
             <p class="subtitle is-6 has-text-centered">Loop (SubD 3)</p>
             <div id="viewer-bunny-loop" class="mesh-viewer-instance-container">
               <div id="loading-bunny-loop" class="loading-message-instance">Loading...</div>
             </div>
           </div>
-          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+          <div class="column is-4-desktop is-4-tablet is-half-mobile viewer-column">
             <p class="subtitle is-6 has-text-centered">Modified Butterfly (SubD 3)</p>
             <div id="viewer-bunny-mod_butterfly" class="mesh-viewer-instance-container">
               <div id="loading-bunny-mod_butterfly" class="loading-message-instance">Loading...</div>
             </div>
           </div>
-          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+          <div class="column is-4-desktop is-4-tablet is-half-mobile viewer-column">
             <p class="subtitle is-6 has-text-centered">Neural Subdivsion (SubD 3)</p>
             <div id="viewer-bunny-neural_subdiv" class="mesh-viewer-instance-container">
               <div id="loading-bunny-neural_subdiv" class="loading-message-instance">Loading...</div>
             </div>
           </div>
-          <div class="column is-2-desktop is-4-tablet is-half-mobile viewer-column">
+          <div class="column is-4-desktop is-4-tablet is-half-mobile viewer-column">
             <p class="subtitle is-6 has-text-centered">Ours (SubD 3)</p>
             <div id="viewer-bunny-ours" class="mesh-viewer-instance-container">
               <div id="loading-bunny-ours" class="loading-message-instance">Loading...</div>
@@ -448,29 +483,17 @@
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered section-title">Performance Advantages & Results</h2>
     <div class="content has-text-justified">
-        <p>Our Neural Mesh Refinement (NMR) method shows significant advantages and robust generalization capabilities compared to existing methods, as demonstrated through extensive experiments on datasets like TOSCA and Thingi10K.</p>
+    <p>Our Neural Mesh Refinement (NMR) method shows significant advantages and robust generalization capabilities compared to existing methods. We demonstrate that NMR can effectively generalize to unseen shapes, unseen poses, arbitrary refinement levels, and non-isometric deformations. This is a core strength achieved through its design.</p>
+  </div>
 
-        <h3 class="title is-4 mt-5">1. Generalization to Unseen Shapes</h3>
-        <p>
-            NMR effectively generalizes to shapes not encountered during training. As shown in figures like the main teaser and Fig. 2 (one training pair) and Fig. 11 (generalization to different shapes) from our paper, even when trained on a single object or shape category, NMR can refine novel shapes with high fidelity, preserving geometric details without the artifacts or shape damage seen in methods like Neural Subdivision.
-        </p>
 
-        <h3 class="title is-4 mt-5">2. Generalization to Unseen (Isometric) Poses</h3>
-        <p>
-            A key practical requirement is generalizing to different poses of a character or object. As shown in Fig. 9 of our paper, NMR, even when trained on a single pose, can successfully generalize to various unseen poses under isometric deformations, maintaining detail and structure. This is crucial for applications like character animation.
-        </p>
-
-        <h3 class="title is-4 mt-5">3. Generalization to Arbitrary Refinement Levels</h3>
-        <p>
-            NMR demonstrates robustness to arbitrary refinement levels, even those exceeding the training levels (see Fig. 12). Unlike methods that may overfit to specific scales associated with training subdivision levels, NMR's scale-invariant intrinsic structure descriptor allows it to produce reasonably smooth and detailed surfaces at new levels.
-        </p>
-
-        <h3 class="title is-4 mt-5">4. Generalization to Non-isometric Deformations</h3>
-        <p>
-            Our method handles non-isometric deformations well, which commonly occur in modeling scenarios. As illustrated in Fig. 10 (and the teaser), even with exaggerated non-isometric changes to the coarse cage, NMR produces plausible refinements, outperforming methods like Neural Subdivision that may introduce artifacts in such challenging cases.
-        </p>
-        <p class="mt-4">Quantitative results on TOSCA and Thingi10K (Tables 1 & 2 in paper) consistently show NMR outperforming baselines (Loop, Modified Butterfly, Neural Subdivision) across metrics like Hausdorff Distance (HD), Chamfer Distance (CD), and PSNR, producing meshes closer to ground truth.</p>
+    <div class="teaser-image-container">
+        <img src="figures/Fig1.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
+        <h2 class="subtitle has-text-centered teaser-caption">
+          NMR does not suffer from the inherent limitations of existing methods, such as volume shrinkage and over-smoothing (Loop), amplification of tessellation artifacts (Modified Butterfly), or shape damage (Neural Subdivision). Moreover, it outperforms Neural Subdivision in generalization across unseen refinement levels and non-isometric deformations.
+        </h2>
     </div>
+
   </div>
 </section>
 
@@ -483,10 +506,7 @@
             <div class="columns is-centered mt-4">
                 <div class="column is-four-fifths">
                     <ul class="features-list">
-                        <li>
-                            <strong>Robust Geometric Learning and Generalization:</strong>
-                            NMR demonstrates strong generalization to unseen shapes, poses, arbitrary refinement levels, and non-isometric deformations. This is a core strength achieved through its design.
-                        </li>
+                       
                         <li>
                             <strong>Intrinsic Structure Descriptor:</strong>
                             A key component that disentangles the network from non-structural information (scale, rotation, translation). This aligns local patches, stabilizes the input feature space, and enables the network to focus on learning and applying intrinsic structural priors for adaptive refinement.
@@ -495,14 +515,7 @@
                             <strong>Locally Adaptive Neural Filter:</strong>
                             This filter, using a graph attention mechanism, extracts local structural features and dynamically adapts learned priors to local patches of different objects, emphasizing relevant neighbors.
                         </li>
-                        <li>
-                            <strong>Learned Adaptive Subdivision:</strong>
-                            Rather than fixed rules, NMR learns to adaptively refine meshes, adding detail where needed while preserving smoothness elsewhere. The refinement characteristics can also adapt based on the training data, exhibiting adaptive refinement when trained on diverse datasets (see Fig. 14 in paper).
-                        </li>
-                        <li>
-                            <strong>Data-Driven Geometric Structure Learning & Style Transfer:</strong>
-                            NMR learns complex geometric patterns from data. When trained on specific shapes, it can exhibit style transfer characteristics, refining new meshes in the learned style (see Fig. 13 in paper).
-                        </li>
+                       
                         <li>
                             <strong>Improved Loss Function (Charbonnier Loss):</strong>
                             The use of Charbonnier loss, a smooth approximation of L1 loss, helps alleviate over-smoothing often seen with L2 loss, better preserving fine details and aiding convergence.
@@ -511,13 +524,62 @@
                             <strong>Progressive Upsampling with Deep Supervision:</strong>
                             The method recursively refines meshes, and multi-level loss supervision aids in network convergence and allows for outputs at various levels of detail.
                         </li>
+                        </li>
                     </ul>
                 </div>
+            </div>
+        </div>
+       
             </div>
         </div>
     </div>
   </div>
 </section>
+
+<section class="section" id="capabilities">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+        <h2 class="title is-3 has-text-centered section-title">Capabilities of NMR</h2>
+        <div class="content">
+            <p class="has-text-centered">Our Neural Mesh Refinement method exhibits a strong ability to learn geometric structures, based on which it derives many applications:</p>
+            <div class="columns is-centered mt-4">
+                <div class="column is-four-fifths">
+                    <ul class="capabilities-list">
+                        <li>
+                          <strong>Geometric Sructure Learning:</strong>
+                          The strong geometric structure learning capability of NMR allows it to learn rich structural priors from the dataset during the training phase, and adaptively apply structural priors based on the geometric structure of the input shape during inference. This makes NMR highly generalizable to unseen shapes, poses, arbitrary refinement levels, and non-isometric deformations.
+                        </li>
+                        <li>
+                          <strong>Locally Adaptive Refinement:</strong>
+                          Rather than fixed rules, NMR learns to adaptively refine meshes, adding detail where needed while preserving smoothness elsewhere. The refinement characteristics can also adapt based on the training data, exhibiting adaptive refinement when trained on diverse datasets (see Fig. 14 in paper). It makes NMR highly generalizable to unseen shapes, poses, arbitrary refinement levels, and non-isometric deformations.
+                        </li>
+                        <li>
+                          <strong>Style Transfer:</strong>
+                          As a data-driven approach, the refinement characteristics of NMR are inherently linked to the composition of the training dataset. When trained on a constrained dataset with limited diversity, NMR tends to overfit and exhibit style transfer characteristics (see Fig. 13 and top two rows of Fig. 14 in paper). As Fig. 13 illustrates, NMR can recognize and replicate the "style" of the training shape, enabling it to refine an initial coarse mesh into various distinct styles. 
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="teaser-image-container">
+          <img src="figures/Fig13_one_row.jpg" alt="Qualitative results on the TOSCA dataset">
+        </div>
+        
+        <h2 class="subtitle has-text-centered teaser-caption">
+          When trained on a single shape, NMR exhibits style transfer characteristics. Using different shapes in training leads to stylized refinement results (blue) biased towards the training shapes (green).
+        </h2>
+
+        <div class="teaser-image-container">
+          <img src="figures/Fig14.jpg" alt="Qualitative results on the TOSCA dataset">
+        </div>
+        
+        <h2 class="subtitle has-text-centered teaser-caption">
+          The refinement characteristics of NMR depend on the composition of the training dataset. When trained on a constrained dataset with limited diversity, NMR exhibits stylized refinement ability (top two rows). When trained on extensive datasets with diverse geometries, NMR exhibits adaptive refinement ability (bottom).
+        </h2>
+    </div>
+  </div>
+</section>
+
 
 
 <section class="section" id="citation">
