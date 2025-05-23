@@ -207,11 +207,12 @@
     <div id="navbarMenu" class="navbar-menu">
       <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
         <a class="navbar-item" href="#abstract">Abstract</a>
-        <a class="navbar-item" href="#teaser-section">Teaser</a>
-        <a class="navbar-item" href="#interactive-demo">Interactive Demo</a>
+        <a class="navbar-item" href="#method">Method</a>
         <a class="navbar-item" href="#results">Results</a>
+        <a class="navbar-item" href="#interactive-demo">Interactive Demo</a>
         <a class="navbar-item" href="#features">Features</a>
-        <a class="navbar-item" href="#citation">Cite</a>
+        <a class="navbar-item" href="#capabilities">Capabilities</a>
+        <a class="navbar-item" href="#citation">Citation</a>
       </div>
     </div>
   </div>
@@ -284,11 +285,11 @@
 <section class="hero teaser" id="teaser-section">
   <div class="container is-max-desktop">
     <div class="hero-body">
-
-      <img src="figures/cover.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
+      
+      <img src="figures/cover_two_row.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
 
       <h2 class="subtitle has-text-centered teaser-caption">
-        Neural Mesh Refinement (NMR) performs data-driven nonlinear refinement and demonstrates robust generalization to unseen shapes, unseen poses, non-isometric deformation. It can also refine coarse non-organic shapes into finer ones with appropriate geometric details, even when trained on organic shapes. 
+        Neural Mesh Refinement (NMR) performs data-driven nonlinear refinement and demonstrates robust generalization to unseen shapes, poses, and non-isometric deformation. It can also refine coarse non-organic shapes into finer ones with appropriate geometric details, even when trained on organic shapes. 
       </h2>
     </div>
   </div>
@@ -335,21 +336,33 @@
     <div class="teaser-image-container">
         <!-- IMPORTANT: Ensure 'figures/Fig1.jpg' exists -->
         <img src="figures/Fig4.jpg" alt="Pipeline of for Neural Mesh Refinement (NMR)">
+        <h2 class="subtitle has-text-centered teaser-caption">
+        NMR processes a coarse triangle mesh (gray) to produce a sequence of subdivided meshes (blue) with varying levels of detail. During training, we minimize the Charbonnier loss between the ground truth (green) and the output meshes (blue) across levels. Our training data comprises pairs of coarse and fine meshes (left) with a bijective map $f$ between each pair. Each refinement involves three steps: $\mathcal{M}$ for midpoint subdivision, $\mathcal{I}$ for intrinsic structure descriptor construction, and $\mathcal{N}_{\Theta}$ for the neural filter. $\mathcal{N}_{\Theta}$ consists of $\mathcal{E}_{\theta}$ (edge feature embedding module), $\mathcal{G}_{\theta}$ (graph attention aggregation module), and $\mathcal{V}_{\theta}$ (vertex repositioning module).
+        </h2>
     </div>
-    <h3 class="subtitle has-text-centered teaser-caption">
-    NMR processes a coarse triangle mesh (gray) to produce a sequence of subdivided meshes (blue) with varying levels of detail. During training, we minimize the Charbonnier loss between the ground truth (green) and the output meshes (blue) across levels. Our training data comprises pairs of coarse and fine meshes (left) with a bijective map $f$ between each pair. Each refinement involves three steps: $\mathcal{M}$ for midpoint subdivision, $\mathcal{I}$ for intrinsic structure descriptor construction, and $\mathcal{N}_{\Theta}$ for the neural filter. $\mathcal{N}_{\Theta}$ consists of $\mathcal{E}_{\theta}$ (edge feature embedding module), $\mathcal{G}_{\theta}$ (graph attention aggregation module), and $\mathcal{V}_{\theta}$ (vertex repositioning module).
-  </h3>
+   
 
     
   </div>
 </section>
 
-<section class="section" id="Results">
+<section class="section" id="results">
     <div class="container is-max-desktop">
         <h2 class="title is-3 has-text-centered section-title">Experimental Results</h2>
         
+        <div class="content has-text-justified">
+        <p>Our Neural Mesh Refinement (NMR) method shows significant advantages and robust generalization capabilities compared to existing methods. We demonstrate that NMR can effectively generalize to unseen shapes, unseen poses, arbitrary refinement levels, and non-isometric deformations. This is a core strength achieved through its design.</p>
+      </div>
+
+
+      <div class="teaser-image-container">
+          <img src="figures/Fig1.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
+          <h2 class="subtitle has-text-centered teaser-caption">
+            NMR does not suffer from the inherent limitations of existing methods, such as volume shrinkage and over-smoothing (Loop), amplification of tessellation artifacts (Modified Butterfly), or shape damage (Neural Subdivision). Moreover, it outperforms Neural Subdivision in generalization across unseen refinement levels and non-isometric deformations.
+          </h2>
+      </div>
         
-        <h3 class="title is-4 has-text-centered"><a href="https://tosca.cs.technion.ac.il/book/resources_data.html">TOSCA dataset</a></h3>
+        <h4 class="title is-4 has-text-centered"><a href="https://tosca.cs.technion.ac.il/book/resources_data.html">TOSCA dataset</a></h4>
         
         <img src="figures/quan_tosca.png" alt="Quantitative results on the TOSCA dataset">
         <h2 class="subtitle has-text-centered teaser-caption">
@@ -357,25 +370,27 @@
         </h2>
         <div class="teaser-image-container">
           <img src="figures/Fig7.jpg" alt="Qualitative results on the TOSCA dataset">
-        </div>
-        
-        <h2 class="subtitle has-text-centered teaser-caption">
-          NMR outperforms all baseline methods on the TOSCA dataset and exhibits significant advantages across all evaluation metrics.our approach produces finer meshes closer to the ground truth, successfully addressing issues encountered in other methods, such as over-smoothing, volume shrinkage, and artifacts.
-        </h2>
 
-        <h3 class="title is-4 has-text-centered"><a href="https://ten-thousand-models.appspot.com">Thingi10K dataset</a></h3>
+          <h2 class="subtitle has-text-centered teaser-caption">
+            NMR outperforms all baseline methods on the TOSCA dataset and exhibits significant advantages across all evaluation metrics.our approach produces finer meshes closer to the ground truth, successfully addressing issues encountered in other methods, such as over-smoothing, volume shrinkage, and artifacts.
+          </h2>
+        </div>
+
+        <h4 class="title is-4 has-text-centered"><a href="https://ten-thousand-models.appspot.com">Thingi10K dataset</a></h4>
         
         <img src="figures/quan_thingi10k.png" alt="Quantitative results in Thingi10K dataset">
         <h2 class="subtitle has-text-centered teaser-caption">
           NMR demonstrates robustness when processing meshes with greater diversity in Thingi10K dataset. NMR outperforms all baseline methods on the Thingi10K dataset and exhibits significant advantages across all evaluation metrics.
         </h2>
+        
         <div class="teaser-image-container">
           <img src="figures/thingi10k_ns_fail.jpg" alt="Qualitative results on the Thingi10K dataset">
+          <h2 class="subtitle has-text-centered teaser-caption">
+          When processing meshes with closely adjacent surfaces, Neural Subdivision may develop self-intersection after a single subdivision step, thereby disrupting the manifold and causing subsequent subdivision steps to fail. In some cases, this ultimately leads to the inability to generate reasonable results, resulting in disrupted mesh shapes.
+          </h2>        
         </div>
          
-        <h2 class="subtitle has-text-centered teaser-caption">
-          When processing meshes with closely adjacent surfaces, Neural Subdivision may develop self-intersection after a single subdivision step, thereby disrupting the manifold and causing subsequent subdivision steps to fail. In some cases, this ultimately leads to the inability to generate reasonable results, resulting in disrupted mesh shapes.
-        </h2>
+        
         <p> We found that Neural Subdivision performs extremely poorly on the Thingi10k dataset. This is because the Thingi10K dataset contains meshes with greater diversity compared to the Tosca dataset. Neural subdivision struggles to converge among patches with diverse geometric characteristics. In contrast, our method demonstrates robustness and does not encounter this issue. For a fairer comparison, the results marked as $Neural\_subdivision*$ in the Table 3 of our paper represent the statistical averages after excluding objects for which Neural Subdivision fails to preserve the shape of the input mesh. Our method still maintains a significant advantage.</p>
     </div>
 </section>
@@ -386,7 +401,7 @@
     <div class="container is-max-desktop">
         <h2 class="title is-3 has-text-centered section-title">Interactive Demo</h2>
         <p class="subtitle is-5 has-text-centered" style="margin-bottom: 2.5rem;">
-            Comparison of the results generated by our method and the baseline method. <br>Use mouse to rotate (left-click & drag), pan (right-click & drag), and zoom (scroll wheel).
+            Comparison of the results generated by our method and the baseline methods. <br>Use mouse to rotate (left-click & drag), pan (right-click & drag), and zoom (scroll wheel).
         </p>
 
         <!-- Gear Comparison -->
@@ -479,23 +494,6 @@
   </div>
 </section>
 
-<section class="section" id="results">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered section-title">Performance Advantages & Results</h2>
-    <div class="content has-text-justified">
-    <p>Our Neural Mesh Refinement (NMR) method shows significant advantages and robust generalization capabilities compared to existing methods. We demonstrate that NMR can effectively generalize to unseen shapes, unseen poses, arbitrary refinement levels, and non-isometric deformations. This is a core strength achieved through its design.</p>
-  </div>
-
-
-    <div class="teaser-image-container">
-        <img src="figures/Fig1.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
-        <h2 class="subtitle has-text-centered teaser-caption">
-          NMR does not suffer from the inherent limitations of existing methods, such as volume shrinkage and over-smoothing (Loop), amplification of tessellation artifacts (Modified Butterfly), or shape damage (Neural Subdivision). Moreover, it outperforms Neural Subdivision in generalization across unseen refinement levels and non-isometric deformations.
-        </h2>
-    </div>
-
-  </div>
-</section>
 
 <section class="section hero is-light" id="features">
   <div class="hero-body">
@@ -586,8 +584,6 @@
   <div class="container is-max-desktop content">
     <h2 class="title is-3 has-text-centered section-title">Citation</h2>
     <p class="has-text-centered">If you find our work useful in your research, please consider citing:</p>
-    <h3 class="title is-4 has-text-centered section-title">Plaintext</h3>
-    <pre class="plaintext"><code>Zhiwei ZHU, Xiang GAO, Lu YU, Yiyi LIAO, 2025. Neural mesh refinement. Frontiers of Information Technology & Electronic Engineering, 26(5):695-712. https://doi.org/10.1631/FITEE.2400344</code></pre>
     <h3 class="title is-4 has-text-centered section-title">BibTeX</h3>
     <pre class="bibtex"><code>@article{zhu2025neural,
         title   = {Neural mesh refinement},
@@ -599,6 +595,8 @@
         pages   = {695--712},
         doi     = {10.1631/FITEE.2400344}
       }</code></pre>
+      <h3 class="title is-4 has-text-centered section-title">Plaintext</h3>
+    <pre class="plaintext"><code>Zhiwei ZHU, Xiang GAO, Lu YU, Yiyi LIAO, 2025. Neural mesh refinement. Frontiers of Information Technology & Electronic Engineering, 26(5):695-712. https://doi.org/10.1631/FITEE.2400344</code></pre>
 
   </div>
 </section>
