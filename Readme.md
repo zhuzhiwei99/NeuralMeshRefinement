@@ -17,7 +17,7 @@
 Neural Mesh Refinement (NMR) utilized a learned geometric prior on fine shapes to adaptively refine coarse meshes through subdivision, demonstrating robust generalization to unseen shapes, poses, and non-isometric deformation. It can also refine coarse non-organic shapes into finer ones with appropriate geometric details, even when trained on organic shapes. 
 
 ![Teaser of Neural Mesh Refinement](figures/cover_two_row.jpg)
-NMR does not suffer from the inherent limitations of existing methods, such as volume shrinkage and over-smoothing (Loop), amplification of tessellation artifacts (Modified Butterfly), or shape damage (Neural Subdivision). Moreover, it outperforms Neural Subdivision in generalization across unseen refinement levels and non-isometric deformations.
+NMR does not suffer from the inherent limitations of existing methods, such as volume shrinkage and over-smoothing (Loop), amplification of tessellation artifacts (Modified Butterfly), or shape damage (Neural Subdivision). Moreover, it outperforms neural subdivision in generalization across non-isometric deformations, unseen shapes, and unseen refinement levels.
 ![Comparision to baselines ](figures/Fig1.jpg)
 
 This is a prototype implementation in Python 3.8  with PyTorch 1.12.1.
