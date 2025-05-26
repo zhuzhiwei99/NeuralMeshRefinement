@@ -20,11 +20,13 @@ Neural Mesh Refinement (NMR) utilized a learned geometric prior on fine shapes t
 NMR does not suffer from the inherent limitations of existing methods, such as volume shrinkage and over-smoothing (Loop), amplification of tessellation artifacts (Modified Butterfly), or shape damage (Neural Subdivision). Moreover, it outperforms neural subdivision in generalization across non-isometric deformations, unseen shapes, and unseen refinement levels.
 ![Comparision to baselines ](figures/Fig1.jpg)
 
-This is a prototype implementation in Python 3.8  with PyTorch 1.12.1.
+
 
 ## ⚡ Quick Start
 
 ### Installation
+
+This repository is a prototype implementation of NMR using Python 3.8 with PyTorch 1.12.1.
 
 ```bash
 # Clone the repo.
@@ -46,7 +48,7 @@ Please install [Pytorch](https://pytorch.org/get-started/previous-versions/) fir
 
 Then, install the required packages:
 ```bash
-# Install necessary Packages 
+# Install required Packages 
 pip install -r requirments.txt
 ```
 
@@ -55,6 +57,10 @@ pip install -r requirments.txt
 For a quick demo, please use the pre-trained model and test on new shapes. To test the pre-trained model please run
 ```bash
 python test.py -p ckpt/thingi10k_netparams.dat -t examples/coarse/sphere.obj -ns 3
+
+# -p: path to the pre-trained model
+# -t: path to the coarse mesh
+# -ns: number of subdivision levels
 ```
 
 Then, you will get refined meshes in  `examples/refined/thingi10k_netparams/`
