@@ -303,7 +303,7 @@
         <h2 class="title is-3 has-text-centered section-title">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Subdivision is a widely used technique for mesh refinement. Classic methods rely on fixed manually-defined weighting rules and struggle to generate a finer mesh with appropriate details, while advanced neural subdivision methods achieve data-driven nonlinear subdivision but lack robustness, suffering from limited subdivision levels and artifacts on novel shapes. To address these issues, this paper introduces a Neural Mesh Refinement (NMR) method that utilizes a learned geometric prior on fine shapes to adaptively refine coarse meshes through subdivision, demonstrating robust generalization. Our key insight is that it is necessary to disentangle the network from non-structural information such as scale, rotation, and translation, enabling it to focus on learning and applying the structural priors of local patches for adaptive refinement. For this purpose, we introduce an intrinsic structure descriptor and a locally adaptive neural filter. The intrinsic structure descriptor excludes the non-structural information to align local patches, thereby stabilizing the input feature space and enabling the network to robustly extract structural priors. The proposed neural filter, using a graph attention mechanism, extracts local structural features and adapts learned priors to local patches. Additionally, we observe that Charbonnier loss can alleviate over-smoothing compared to L2 loss. By combining these design choices, our method gains robust geometric learning and locally adaptive capabilities, enhancing generalization to unseen shapes and arbitrary refinement levels. We evaluate our method on a diverse set of complex three-dimensional (3D) shapes and show that it outperforms existing subdivision methods in terms of geometry quality.
+            Subdivision is a widely used technique for mesh refinement. Classic methods rely on fixed manually-defined weighting rules and struggle to generate a finer mesh with appropriate details, while advanced neural subdivision methods achieve data-driven nonlinear subdivision but lack robustness, suffering from limited subdivision levels and artifacts on novel shapes. To address these issues, this paper introduces a Neural Mesh Refinement (NMR) method that utilizes a learned geometric prior on fine shapes to adaptively refine coarse meshes through subdivision, demonstrating robust generalization capabilities. Our key insight is that it is necessary to disentangle the network from non-structural information such as scale, rotation, and translation, enabling it to focus on learning and applying the structural priors of local patches for adaptive refinement. For this purpose, we introduce an intrinsic structure descriptor and a locally adaptive neural filter. The intrinsic structure descriptor excludes the non-structural information to align local patches, thereby stabilizing the input feature space and enabling the network to robustly extract structural priors. The proposed neural filter, using a graph attention mechanism, extracts local structural features and adapts learned priors to local patches. Additionally, we observe that Charbonnier loss can alleviate over-smoothing compared to L2 loss. By combining these design choices, our method gains robust geometric learning and locally adaptive capabilities, enhancing generalization to various situations: such as unseen shapes and unseen refinement levels. We evaluate our method on a diverse set of complex three-dimensional (3D) shapes and show that it outperforms existing subdivision methods in terms of geometry quality.
           </p>
         </div>
       </div>
@@ -358,7 +358,7 @@
       <div class="teaser-image-container">
           <img src="figures/Fig1.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
           <h2 class="subtitle has-text-centered teaser-caption">
-            NMR does not suffer from the inherent limitations of existing methods, such as volume shrinkage and over-smoothing (Loop), amplification of tessellation artifacts (Modified Butterfly), or shape damage (Neural Subdivision). Moreover, it outperforms Neural Subdivision in generalization across unseen refinement levels and non-isometric deformations.
+            NMR does not suffer from the inherent limitations of existing methods, such as volume shrinkage and over-smoothing (Loop), amplification of tessellation artifacts (modified butterfly), or shape damage (neural subdivision). Moreover, it outperforms neural subdivision in generalization across non-isometric deformations, unseen shapes, and unseen refinement levels.
           </h2>
       </div>
         
@@ -588,7 +588,7 @@
     <pre class="bibtex"><code>@article{zhu2025neural,
         title   = {Neural mesh refinement},
         author  = {ZHU, Zhiwei and GAO, Xiang and YU, Lu and LIAO, Yiyi},
-        journal = {Frontiers of Information Technology \& Electronic Engineering (FITEE)},
+        journal = {Frontiers of Information Technology \& Electronic Engineering},
         year    = {2025},
         volume  = {26},
         number  = {5},
