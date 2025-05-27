@@ -303,7 +303,7 @@
         <h2 class="title is-3 has-text-centered section-title">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Subdivision is a widely used technique for mesh refinement. Classic methods rely on fixed manually-defined weighting rules and struggle to generate a finer mesh with appropriate details, while advanced neural subdivision methods achieve data-driven nonlinear subdivision but lack robustness, suffering from limited subdivision levels and artifacts on novel shapes. To address these issues, this paper introduces a Neural Mesh Refinement (NMR) method that utilizes a learned geometric prior on fine shapes to adaptively refine coarse meshes through subdivision, demonstrating robust generalization capabilities. Our key insight is that it is necessary to disentangle the network from non-structural information such as scale, rotation, and translation, enabling it to focus on learning and applying the structural priors of local patches for adaptive refinement. For this purpose, we introduce an intrinsic structure descriptor and a locally adaptive neural filter. The intrinsic structure descriptor excludes the non-structural information to align local patches, thereby stabilizing the input feature space and enabling the network to robustly extract structural priors. The proposed neural filter, using a graph attention mechanism, extracts local structural features and adapts learned priors to local patches. Additionally, we observe that Charbonnier loss can alleviate over-smoothing compared to L2 loss. By combining these design choices, our method gains robust geometric learning and locally adaptive capabilities, enhancing generalization to various situations: such as unseen shapes and unseen refinement levels. We evaluate our method on a diverse set of complex three-dimensional (3D) shapes and show that it outperforms existing subdivision methods in terms of geometry quality.
+            Subdivision is a widely used technique for mesh refinement. Classic methods rely on fixed manually-defined weighting rules and struggle to generate a finer mesh with appropriate details, while advanced neural subdivision methods achieve data-driven nonlinear subdivision but lack robustness, suffering from limited subdivision levels and artifacts on novel shapes. To address these issues, this paper introduces a Neural Mesh Refinement (NMR) method that utilizes a learned geometric prior on fine shapes to adaptively refine coarse meshes through subdivision, demonstrating robust generalization. Our key insight is that it is necessary to disentangle the network from non-structural information such as scale, rotation, and translation, enabling it to focus on learning and applying the structural priors of local patches for adaptive refinement. For this purpose, we introduce an intrinsic structure descriptor and a locally adaptive neural filter. The intrinsic structure descriptor excludes the non-structural information to align local patches, thereby stabilizing the input feature space and enabling the network to robustly extract structural priors. The proposed neural filter, using a graph attention mechanism, extracts local structural features and adapts learned priors to local patches. Additionally, we observe that Charbonnier loss can alleviate over-smoothing compared to L2 loss. By combining these design choices, our method gains robust geometric learning and locally adaptive capabilities, enhancing generalization to various situations: such as unseen shapes and arbitrary refinement levels. We evaluate our method on a diverse set of complex three-dimensional (3D) shapes and show that it outperforms existing subdivision methods in terms of geometry quality.
           </p>
         </div>
       </div>
@@ -317,13 +317,13 @@
     <div class="content has-text-justified">
         <p>Our Neural Mesh Refinement (NMR) method processes a coarse triangle mesh to produce a sequence of subdivided meshes with varying levels of detail. Each refinement step involves three key stages:
             <ol>
-                <li><strong>Midpoint Subdivision ($\mathcal{M}$):</strong> New vertices are inserted along each edge of the mesh, and faces are subdivided.</li>
+                <li><strong>Midpoint Subdivision ($\mathcal{M}$):</strong> The original face is subdivided into four faces by inserting new vertices at the midpoint of each edge and connecting them through new edges.</li>
                 <li><strong>Intrinsic Structure Descriptor Construction ($\mathcal{I}$):</strong> For newly inserted vertices, an intrinsic structure descriptor is created by normalizing their one-ring neighborhood. This normalization makes the features invariant to scale, rotation, and translation, allowing the network to focus on structural priors.</li>
                 <li><strong>Neural Filter ($\mathcal{N}_{\Theta}$):</strong> This filter predicts offsets for the new vertices to update their positions. It consists of:
                     <ul>
                         <li><em>Edge Feature Embedding ($\mathcal{E}_{\theta}$):</em> Captures features from the outgoing edges of the central vertex.</li>
                         <li><em>Graph Attention Aggregation ($\mathcal{G}_{\theta}$):</em> Aggregates edge features to the central vertex using a graph attention mechanism, adaptively emphasizing relevant local structures.</li>
-                        <li><em>Vertex Repositioning ($\mathcal{V}_{\theta}$):</em> Predicts residuals from the central vertex feature to refine its position.</li>
+                        <li><em>Vertex Repositioning ($\mathcal{V}_{\theta}$):</em> Predicts residual from the central vertex feature to refine its position.</li>
                     </ul>
                 </li>
             </ol>
@@ -348,50 +348,50 @@
 
 <section class="section" id="results">
     <div class="container is-max-desktop">
-        <h2 class="title is-3 has-text-centered section-title">Experimental Results</h2>
+      <h2 class="title is-3 has-text-centered section-title">Results</h2>
         
-        <div class="content has-text-justified">
+      <div class="content has-text-justified">
         <p>Our Neural Mesh Refinement (NMR) method shows significant advantages and robust generalization capabilities compared to existing methods. We demonstrate that NMR can effectively generalize to unseen shapes, unseen poses, arbitrary refinement levels, and non-isometric deformations. This is a core strength achieved through its design.</p>
       </div>
 
 
       <div class="teaser-image-container">
-          <img src="figures/Fig1.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
-          <h2 class="subtitle has-text-centered teaser-caption">
-            NMR does not suffer from the inherent limitations of existing methods, such as volume shrinkage and over-smoothing (Loop), amplification of tessellation artifacts (modified butterfly), or shape damage (neural subdivision). Moreover, it outperforms neural subdivision in generalization across non-isometric deformations, unseen shapes, and unseen refinement levels.
-          </h2>
+        <img src="figures/Fig1.jpg" alt="Teaser image for Neural Mesh Refinement (NMR)">
+        <h2 class="subtitle has-text-centered teaser-caption">
+          NMR does not suffer from the inherent limitations of existing methods, such as volume shrinkage and over-smoothing (Loop), amplification of tessellation artifacts (modified butterfly), or shape damage (neural subdivision). Moreover, it outperforms neural subdivision in generalization across non-isometric deformations, unseen shapes, and unseen refinement levels.
+        </h2>
       </div>
         
-        <h4 class="title is-4 has-text-centered"><a href="https://tosca.cs.technion.ac.il/book/resources_data.html">TOSCA dataset</a></h4>
-        
-        <img src="figures/quan_tosca.png" alt="Quantitative results on the TOSCA dataset">
-        <h2 class="subtitle has-text-centered teaser-caption">
-          NMR outperforms all baseline methods on the TOSCA dataset and exhibits significant advantages across all evaluation metrics.
-        </h2>
-        <div class="teaser-image-container">
-          <img src="figures/Fig7.jpg" alt="Qualitative results on the TOSCA dataset">
+      <!-- <h4 class="title is-4 has-text-centered"><a href="https://tosca.cs.technion.ac.il/book/resources_data.html">TOSCA dataset</a></h4>
+      
+      <img src="figures/quan_tosca.png" alt="Quantitative results on the TOSCA dataset">
+      <h2 class="subtitle has-text-centered teaser-caption">
+        NMR outperforms all baseline methods on the TOSCA dataset and exhibits significant advantages across all evaluation metrics.
+      </h2>
+      <div class="teaser-image-container">
+        <img src="figures/Fig7.jpg" alt="Qualitative results on the TOSCA dataset">
 
-          <h2 class="subtitle has-text-centered teaser-caption">
-            NMR outperforms all baseline methods on the TOSCA dataset and exhibits significant advantages across all evaluation metrics.our approach produces finer meshes closer to the ground truth, successfully addressing issues encountered in other methods, such as over-smoothing, volume shrinkage, and artifacts.
-          </h2>
-        </div>
-
-        <h4 class="title is-4 has-text-centered"><a href="https://ten-thousand-models.appspot.com">Thingi10K dataset</a></h4>
-        
-        <img src="figures/quan_thingi10k.png" alt="Quantitative results in Thingi10K dataset">
         <h2 class="subtitle has-text-centered teaser-caption">
-          NMR demonstrates robustness when processing meshes with greater diversity in Thingi10K dataset. NMR outperforms all baseline methods on the Thingi10K dataset and exhibits significant advantages across all evaluation metrics.
+          NMR outperforms all baseline methods on the TOSCA dataset and exhibits significant advantages across all evaluation metrics.our approach produces finer meshes closer to the ground truth, successfully addressing issues encountered in other methods, such as over-smoothing, volume shrinkage, and artifacts.
         </h2>
+      </div>
+
+      <h4 class="title is-4 has-text-centered"><a href="https://ten-thousand-models.appspot.com">Thingi10K dataset</a></h4>
+      
+      <img src="figures/quan_thingi10k.png" alt="Quantitative results in Thingi10K dataset">
+      <h2 class="subtitle has-text-centered teaser-caption">
+        NMR demonstrates robustness when processing meshes with greater diversity in Thingi10K dataset. NMR outperforms all baseline methods on the Thingi10K dataset and exhibits significant advantages across all evaluation metrics.
+      </h2>
+      
+      <div class="teaser-image-container">
+        <img src="figures/thingi10k_ns_fail.jpg" alt="Qualitative results on the Thingi10K dataset">
+        <h2 class="subtitle has-text-centered teaser-caption">
+        When processing meshes with closely adjacent surfaces, Neural Subdivision may develop self-intersection after a single subdivision step, thereby disrupting the manifold and causing subsequent subdivision steps to fail. In some cases, this ultimately leads to the inability to generate reasonable results, resulting in disrupted mesh shapes.
+        </h2>        
+      </div>
         
-        <div class="teaser-image-container">
-          <img src="figures/thingi10k_ns_fail.jpg" alt="Qualitative results on the Thingi10K dataset">
-          <h2 class="subtitle has-text-centered teaser-caption">
-          When processing meshes with closely adjacent surfaces, Neural Subdivision may develop self-intersection after a single subdivision step, thereby disrupting the manifold and causing subsequent subdivision steps to fail. In some cases, this ultimately leads to the inability to generate reasonable results, resulting in disrupted mesh shapes.
-          </h2>        
-        </div>
-         
-        
-        <p> We found that Neural Subdivision performs extremely poorly on the Thingi10k dataset. This is because the Thingi10K dataset contains meshes with greater diversity compared to the Tosca dataset. Neural subdivision struggles to converge among patches with diverse geometric characteristics. In contrast, our method demonstrates robustness and does not encounter this issue. For a fairer comparison, the results marked as $Neural\_subdivision*$ in the Table 3 of our paper represent the statistical averages after excluding objects for which Neural Subdivision fails to preserve the shape of the input mesh. Our method still maintains a significant advantage.</p>
+      
+      <p> We found that Neural Subdivision performs extremely poorly on the Thingi10k dataset. This is because the Thingi10K dataset contains meshes with greater diversity compared to the Tosca dataset. Neural subdivision struggles to converge among patches with diverse geometric characteristics. In contrast, our method demonstrates robustness and does not encounter this issue. For a fairer comparison, the results marked as $Neural\_subdivision*$ in the Table 3 of our paper represent the statistical averages after excluding objects for which Neural Subdivision fails to preserve the shape of the input mesh. Our method still maintains a significant advantage.</p> -->
     </div>
 </section>
 
@@ -545,11 +545,11 @@
                     <ul class="capabilities-list">
                         <li>
                           <strong>Geometric Sructure Learning:</strong>
-                          The strong geometric structure learning capability of NMR allows it to learn rich structural priors from the dataset during the training phase, and adaptively apply structural priors based on the geometric structure of the input shape during inference. This makes NMR highly generalizable to unseen shapes, poses, arbitrary refinement levels, and non-isometric deformations.
+                          The strong geometric structure learning capability of NMR allows it to learn rich structural priors from the dataset during the training phase, and adaptively apply structural priors based on the geometric structure of the input shape during inference.
                         </li>
                         <li>
                           <strong>Locally Adaptive Refinement:</strong>
-                          Rather than fixed rules, NMR learns to adaptively refine meshes, adding detail where needed while preserving smoothness elsewhere. The refinement characteristics can also adapt based on the training data, exhibiting adaptive refinement when trained on diverse datasets (see Fig. 14 in paper). It makes NMR highly generalizable to unseen shapes, poses, arbitrary refinement levels, and non-isometric deformations.
+                          The refinement characteristics of NMR are learned from the training data, exhibiting adaptive refinement when trained on diverse datasets (see Fig. 14 in paper). Rather than fixed rules, NMR learns to adaptively refine meshes, adding detail where needed while preserving smoothness elsewhere.  It makes NMR highly generalizable to unseen shapes, unseen poses, arbitrary refinement levels, and non-isometric deformations.
                         </li>
                         <li>
                           <strong>Style Transfer:</strong>
@@ -559,20 +559,21 @@
                 </div>
             </div>
         </div>
-        <div class="teaser-image-container">
-          <img src="figures/Fig13_one_row.jpg" alt="Qualitative results on the TOSCA dataset">
-        </div>
         
-        <h2 class="subtitle has-text-centered teaser-caption">
-          When trained on a single shape, NMR exhibits style transfer characteristics. Using different shapes in training leads to stylized refinement results (blue) biased towards the training shapes (green).
-        </h2>
-
         <div class="teaser-image-container">
           <img src="figures/Fig14.jpg" alt="Qualitative results on the TOSCA dataset">
         </div>
         
         <h2 class="subtitle has-text-centered teaser-caption">
           The refinement characteristics of NMR depend on the composition of the training dataset. When trained on a constrained dataset with limited diversity, NMR exhibits stylized refinement ability (top two rows). When trained on extensive datasets with diverse geometries, NMR exhibits adaptive refinement ability (bottom).
+        </h2>
+
+        <div class="teaser-image-container">
+          <img src="figures/Fig13_one_row.jpg" alt="Qualitative results on the TOSCA dataset">
+        </div>
+        
+        <h2 class="subtitle has-text-centered teaser-caption">
+          When trained on a single shape, NMR exhibits style transfer characteristics. Using different shapes in training leads to stylized refinement results (blue) biased towards the training shapes (green).
         </h2>
     </div>
   </div>
