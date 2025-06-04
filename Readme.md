@@ -1,10 +1,11 @@
 
 <div align="center">
-    <h2> <a href="https://arxiv.org/abs/2405.20853">Neural Mesh Refinement (NMR)</a></h2>
+    <h2> <a href="https://link.springer.com/article/10.1631/FITEE.2400344">Neural Mesh Refinement (NMR)</a></h2>
 
 <p align="center">
   <a href="https://zhuzhiwei99.github.io/NeuralMeshRefinement/">[Project Page]</a> 
-  <a href="https://jzus.zju.edu.cn/iparticle.php?doi=10.1631/FITEE.2400344">[Paper]</a>
+  <a href="docs/Zhu et al_2025_NeuralMeshRefinement.pdf">[Paper]</a>
+  <a href="docs/Zhu et al_2025_NeuralMeshRefinement.pptx">[Slice]</a>
   <a href="#-citation">[Citation]
 </p>
 
