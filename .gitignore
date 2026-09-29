@@ -1,0 +1,14 @@
+ckpt/
+data_meshes/
+data_pkl/
+jobs/
+loss_data/
+test/
+test_robust/
+.vscode/
+.venv/
+__pycache__/
+*.log
+*.pth
+*.pt
+*.npy

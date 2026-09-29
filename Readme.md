@@ -53,7 +53,7 @@ Then, install the required packages:
 pip install -r requirments.txt
 ```
 
-## 💻Test
+## 💻 Test
 
 For a quick demo, please use the pre-trained model and test on new shapes. To test the pre-trained model please run
 ```bash

@@ -38,7 +38,7 @@ class MLP(torch.nn.Module):
 
 class NMRNet(torch.nn.Module):
     # Neural Mesh Refinement network
-    def __init__(self, Din, Dout, numSubd, scale=True):
+    def __init__(self, Din, Dout, numSubd, scale=True, verbose=False):
         super(NMRNet, self).__init__()
         self.Din = Din
         self.Dout = Dout
@@ -50,14 +50,14 @@ class NMRNet(torch.nn.Module):
         self.vertex_reposition = MLP(Dout, [32, 16], 3)
 
         self.pool = torch.nn.AvgPool2d((2, 1))  # half-edge pool
-
-        # print network architecture
-        print('NMRNet Parameters:')
-        print('numSubd:', self.numSubd)
-        print('scale normalization:', self.scale)
-        print('edge_feature_embedding: ', self.edge_feature_embedding)
-        print('graph_attention_aggregation: ', self.graph_attention_aggregation)
-        print('vertex_reposition: ', self.vertex_reposition)
+        if verbose:
+            # print network architecture
+            print('NMRNet Parameters:')
+            print('numSubd:', self.numSubd)
+            print('scale normalization:', self.scale)
+            print('edge_feature_embedding: ', self.edge_feature_embedding)
+            print('graph_attention_aggregation: ', self.graph_attention_aggregation)
+            print('vertex_reposition: ', self.vertex_reposition)
 
     def getMidpointSixHalfflap(self, poolmat, even_num, vertex_num):
         half_edge = poolmat._indices().transpose(0, 1)  # 2nE x 2
